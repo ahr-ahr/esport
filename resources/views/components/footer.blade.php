@@ -1,8 +1,8 @@
-<footer class="bg-blue-500 text-white p-12">
+<footer class="bg-gray-900 border-t-1 border-gray-800 text-white p-12">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6">
         <!-- Brand -->
         <div>
-            <h1 class="text-2xl font-bold text-black">Skandal69</h1>
+            <h1 class="text-2xl font-bold text-red-900">Media69</h1>
             <p class="text-sm mt-2">Tempat komunitas gamers terbaik.</p>
         </div>
 
@@ -31,7 +31,7 @@
     </div>
 
     <div class="mt-10 border-t border-gray-600 pt-6 text-sm text-gray-400 text-center md:flex md:justify-between">
-        <p>&copy; 2025 Skandal69. All rights reserved.</p>
+        <p>&copy; 2025 Media69. All rights reserved.</p>
         <div class="flex gap-6 justify-center mt-2 md:mt-0">
             <a href="#" class="hover:text-white">Kebijakan Privasi</a>
             <a href="#" class="hover:text-white">Syarat Penggunaan</a>

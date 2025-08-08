@@ -10,6 +10,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    @stack('styles')
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    @stack('scripts')
 
     <!-- Pakai compat version (UMD Global Namespace) -->
     <!-- Firebase SDK (modular version) -->
@@ -74,11 +80,13 @@
 </head>
 
 <body class="bg-gray-100 font-sans">
-    @include('components.navbar')
+    @include('components.header')
 
-    <main class="max-w-7xl mx-auto p-6">
+    <main class="bg-gray-900">
         @yield('content')
     </main>
+
+    @include('components.navbar')
 
     @include('components.footer')
 </body>
