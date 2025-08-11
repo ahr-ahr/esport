@@ -5,21 +5,19 @@
 @section('content')
 <section class="max-w-7xl mx-auto px-4 py-8">
   <div class="grid md:grid-cols-3 gap-6 items-stretch">
+    
     <!-- LEFT: CAROUSEL (2 kolom) -->
     <div class="md:col-span-2">
       <div class="swiper rounded-2xl overflow-hidden shadow-lg ring-1 ring-white/10">
         <div class="swiper-wrapper">
-          <!-- Slide 1 -->
           <div class="swiper-slide">
-            <img src="{{ asset('images/slide1.jpg') }}" alt="Featured Match 1" class="w-full h-72 md:h-[420px] object-cover">
+            <img src="{{ asset('images/slide1.jpg') }}" alt="Featured Match 1" class="w-full h-72 md:h-[420px] object-cover object-center">
           </div>
-          <!-- Slide 2 -->
           <div class="swiper-slide">
-            <img src="{{ asset('images/slide2.jpg') }}" alt="Featured Match 2" class="w-full h-72 md:h-[420px] object-cover">
+            <img src="{{ asset('images/slide2.jpg') }}" alt="Featured Match 2" class="w-full h-72 md:h-[420px] object-cover object-center">
           </div>
-          <!-- Slide 3 -->
           <div class="swiper-slide">
-            <img src="{{ asset('images/slide3.jpg') }}" alt="Featured Match 3" class="w-full h-72 md:h-[420px] object-cover">
+            <img src="{{ asset('images/slide3.jpg') }}" alt="Featured Match 3" class="w-full h-72 md:h-[420px] object-cover object-center">
           </div>
         </div>
 
@@ -33,94 +31,120 @@
     <!-- RIGHT: LIVE SCORE PANEL -->
     <aside class="bg-white/5 backdrop-blur rounded-2xl p-4 md:p-5 shadow-lg ring-1 ring-white/10 text-gray-100">
       <div class="flex items-center justify-between mb-3">
-        <h3 class="text-lg font-bold" style="color:#ab0506d8">Live Score</h3>
+        <h3 class="text-lg font-bold text-orange-400">Live Score</h3>
         <span class="text-xs text-gray-400" id="lastUpdated">—</span>
       </div>
 
-      <ul id="liveScoreList" class="space-y-3 max-h-[420px] overflow-auto pr-1">
-        <!-- Example item -->
-        <!-- item akan diisi JS; kalau mau statis, taruh <li> manual -->
+      <ul id="liveScoreList" class="space-y-3 max-h-[420px] overflow-auto pr-1 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+        <!-- Item dari JS -->
       </ul>
 
       <a href="{{ route('tournaments.index') }}"
-         class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-white bg-[#ab0506d8] hover:bg-red-700 px-4 py-2 rounded-lg">
+         class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-lg transition">
         Lihat Semua Pertandingan
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M13.2 5.2a1 1 0 1 1 1.6-1.2l6 8a1 1 0 0 1 0 1.2l-6 8a1 1 0 1 1-1.6-1.2L18 13H4a1 1 0 1 1 0-2h14l-4.8-5.8Z"/></svg>
       </a>
     </aside>
+
   </div>
 </section>
+
 
 <section class="max-w-7xl mx-auto px-4 py-10">
   <div class="flex items-end justify-between mb-6">
     <h2 class="text-2xl md:text-3xl font-bold text-white">Berita Terbaru</h2>
     <a href="#"
-       class="inline-flex items-center gap-2 text-sm font-semibold text-white bg-[#ab0506d8] hover:bg-red-700 px-4 py-2 rounded-lg">
+       class="inline-flex items-center gap-2 text-sm font-semibold text-white bg-[#FF9800] hover:bg-orange-600 px-4 py-2 rounded-lg">
       Lihat Semua
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M13.2 5.2a1 1 0 1 1 1.6-1.2l6 8a1 1 0 0 1 0 1.2l-6 8a1 1 0 1 1-1.6-1.2L18 13H4a1 1 0 1 1 0-2h14l-4.8-5.8Z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M13.2 5.2a1 1 0 1 1 1.6-1.2l6 8a1 1 0 0 1 0 1.2l-6 8a1 1 0 1 1-1.6-1.2L18 13H4a1 1 0 1 1 0-2h14l-4.8-5.8Z"/>
+      </svg>
     </a>
   </div>
 
-  @php
-    $dummyNews = [
-      [
-        'title' => 'RRQ Kalah Tipis dari EVOS di Grand Final MPL',
-        'category' => 'MLBB',
-        'time' => '2 jam lalu',
-        'excerpt' => 'Pertandingan sengit antara RRQ dan EVOS di grand final MPL musim ini berakhir dengan skor tipis 3-2.',
-        'image' => asset('images/news1.jpg')
-      ],
-      [
-        'title' => 'Talon Esports Menang Telak di DPC SEA',
-        'category' => 'DOTA2',
-        'time' => '5 jam lalu',
-        'excerpt' => 'Talon Esports berhasil mengalahkan lawannya dengan skor telak 2-0 dalam lanjutan DPC SEA.',
-        'image' => asset('images/news2.jpg')
-      ],
-      [
-        'title' => 'DRX Comeback Lawan PRX di Valorant Champions',
-        'category' => 'VALO',
-        'time' => '1 hari lalu',
-        'excerpt' => 'DRX menunjukkan mental juara dengan comeback dramatis melawan Paper Rex di turnamen Valorant Champions.',
-        'image' => asset('images/news3.jpg')
-      ],
-    ];
-  @endphp
-
   <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-    @foreach($dummyNews as $item)
-      <article class="group rounded-2xl overflow-hidden bg-white/5 ring-1 ring-white/10 shadow-lg">
-        <a href="#" class="block overflow-hidden">
-          <img src="{{ $item['image'] }}"
-               alt="{{ $item['title'] }}"
-               class="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105">
-        </a>
-
-        <div class="p-4">
-          <div class="flex items-center gap-2 text-xs text-gray-400 mb-2">
-            <span class="px-2 py-0.5 rounded-full bg-[#ab0506d8]/20 text-[11px] text-[#ab0506d8]">
-              {{ $item['category'] }}
-            </span>
-            <span>•</span>
-            <time>{{ $item['time'] }}</time>
-          </div>
-
-          <h3 class="text-base font-semibold text-gray-100 group-hover:text-white line-clamp-2">
-            <a href="#">{{ $item['title'] }}</a>
-          </h3>
-
-          <p class="mt-2 text-sm text-gray-400 line-clamp-3">
-            {{ $item['excerpt'] }}
-          </p>
-
-          <a href="#"
-             class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-white/90 hover:text-white">
-            Baca Selengkapnya
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M13.2 5.2a1 1 0 1 1 1.6-1.2l6 8a1 1 0 0 1 0 1.2l-6 8a1 1 0 1 1-1.6-1.2L18 13H4a1 1 0 1 1 0-2h14l-4.8-5.8Z"/></svg>
-          </a>
+    
+    <!-- News 1 -->
+    <article class="group rounded-2xl overflow-hidden bg-white/5 ring-1 ring-white/10 shadow-lg">
+      <a href="#" class="block overflow-hidden">
+        <img src="images/news1.jpg" alt="RRQ Kalah Tipis dari EVOS di Grand Final MPL"
+             class="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105">
+      </a>
+      <div class="p-4">
+        <div class="flex items-center gap-2 text-xs text-gray-400 mb-2">
+          <span class="px-2 py-0.5 rounded-full bg-[#FF9800]/20 text-[11px] text-[#FF9800]">MLBB</span>
+          <span>•</span>
+          <time>2 jam lalu</time>
         </div>
-      </article>
-    @endforeach
+        <h3 class="text-base font-semibold text-gray-100 group-hover:text-white line-clamp-2">
+          <a href="#">RRQ Kalah Tipis dari EVOS di Grand Final MPL</a>
+        </h3>
+        <p class="mt-2 text-sm text-gray-400 line-clamp-3">
+          Pertandingan sengit antara RRQ dan EVOS di grand final MPL musim ini berakhir dengan skor tipis 3-2.
+        </p>
+        <a href="#" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#FF9800] hover:text-orange-400">
+          Baca Selengkapnya
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M13.2 5.2a1 1 0 1 1 1.6-1.2l6 8a1 1 0 0 1 0 1.2l-6 8a1 1 0 1 1-1.6-1.2L18 13H4a1 1 0 1 1 0-2h14l-4.8-5.8Z"/>
+          </svg>
+        </a>
+      </div>
+    </article>
+
+    <!-- News 2 -->
+    <article class="group rounded-2xl overflow-hidden bg-white/5 ring-1 ring-white/10 shadow-lg">
+      <a href="#" class="block overflow-hidden">
+        <img src="images/news2.jpg" alt="Talon Esports Menang Telak di DPC SEA"
+             class="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105">
+      </a>
+      <div class="p-4">
+        <div class="flex items-center gap-2 text-xs text-gray-400 mb-2">
+          <span class="px-2 py-0.5 rounded-full bg-[#FF9800]/20 text-[11px] text-[#FF9800]">DOTA2</span>
+          <span>•</span>
+          <time>5 jam lalu</time>
+        </div>
+        <h3 class="text-base font-semibold text-gray-100 group-hover:text-white line-clamp-2">
+          <a href="#">Talon Esports Menang Telak di DPC SEA</a>
+        </h3>
+        <p class="mt-2 text-sm text-gray-400 line-clamp-3">
+          Talon Esports berhasil mengalahkan lawannya dengan skor telak 2-0 dalam lanjutan DPC SEA.
+        </p>
+        <a href="#" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#FF9800] hover:text-orange-400">
+          Baca Selengkapnya
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M13.2 5.2a1 1 0 1 1 1.6-1.2l6 8a1 1 0 0 1 0 1.2l-6 8a1 1 0 1 1-1.6-1.2L18 13H4a1 1 0 1 1 0-2h14l-4.8-5.8Z"/>
+          </svg>
+        </a>
+      </div>
+    </article>
+
+    <!-- News 3 -->
+    <article class="group rounded-2xl overflow-hidden bg-white/5 ring-1 ring-white/10 shadow-lg">
+      <a href="#" class="block overflow-hidden">
+        <img src="images/news3.jpg" alt="DRX Comeback Lawan PRX di Valorant Champions"
+             class="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105">
+      </a>
+      <div class="p-4">
+        <div class="flex items-center gap-2 text-xs text-gray-400 mb-2">
+          <span class="px-2 py-0.5 rounded-full bg-[#FF9800]/20 text-[11px] text-[#FF9800]">VALO</span>
+          <span>•</span>
+          <time>1 hari lalu</time>
+        </div>
+        <h3 class="text-base font-semibold text-gray-100 group-hover:text-white line-clamp-2">
+          <a href="#">DRX Comeback Lawan PRX di Valorant Champions</a>
+        </h3>
+        <p class="mt-2 text-sm text-gray-400 line-clamp-3">
+          DRX menunjukkan mental juara dengan comeback dramatis melawan Paper Rex di turnamen Valorant Champions.
+        </p>
+        <a href="#" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#FF9800] hover:text-orange-400">
+          Baca Selengkapnya
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M13.2 5.2a1 1 0 1 1 1.6-1.2l6 8a1 1 0 0 1 0 1.2l-6 8a1 1 0 1 1-1.6-1.2L18 13H4a1 1 0 1 1 0-2h14l-4.8-5.8Z"/>
+          </svg>
+        </a>
+      </div>
+    </article>
+
   </div>
 </section>
 
@@ -130,141 +154,99 @@
 
     <!-- Filter -->
     <div class="inline-flex gap-2 bg-white/5 ring-1 ring-white/10 rounded-full p-1">
-      <button class="tnm-filter active px-3 py-1.5 text-xs md:text-sm rounded-full text-white bg-[#ab0506d8]" data-filter="ALL">All</button>
+      <button class="tnm-filter active px-3 py-1.5 text-xs md:text-sm rounded-full text-white bg-[#FF9800]" data-filter="ALL">All</button>
       <button class="tnm-filter px-3 py-1.5 text-xs md:text-sm rounded-full text-gray-200 hover:bg-white/10" data-filter="MLBB">MLBB</button>
       <button class="tnm-filter px-3 py-1.5 text-xs md:text-sm rounded-full text-gray-200 hover:bg-white/10" data-filter="DOTA2">DOTA2</button>
-      <button class="tnm-filter px-3 py-1.5 text-xs md:text-sm rounded-full text-gray-2 00 hover:bg-white/10" data-filter="VALO">VALO</button>
+      <button class="tnm-filter px-3 py-1.5 text-xs md:text-sm rounded-full text-gray-200 hover:bg-white/10" data-filter="VALO">VALO</button>
     </div>
   </div>
 
-  @php
-    $statusColor = [
-      'LIVE' => 'bg-red-600/90',
-      'UPCOMING' => 'bg-yellow-500/80',
-      'FINISHED' => 'bg-gray-500/60',
-    ];
-
-    $tournaments = [
-      [
-        'title' => 'MPL Community Cup',
-        'game' => 'MLBB',
-        'date' => '10–12 Okt 2025',
-        'prize' => 'Rp 25.000.000',
-        'slots' => '64/64 (Full)',
-        'status' => 'UPCOMING',
-        'image' => 'https://source.unsplash.com/800x600/?mobile-legends,esports',
-        'link'  => '#'
-      ],
-      [
-        'title' => 'SEA Valorant Open',
-        'game' => 'VALO',
-        'date' => 'Hari ini • 19:00',
-        'prize' => 'Rp 15.000.000',
-        'slots' => '14/16',
-        'status' => 'LIVE',
-        'image' => 'https://source.unsplash.com/800x600/?valorant,esports',
-        'link'  => '#'
-      ],
-      [
-        'title' => 'DPC Qualifier',
-        'game' => 'DOTA2',
-        'date' => '22–24 Sep 2025',
-        'prize' => 'Rp 40.000.000',
-        'slots' => '32/64',
-        'status' => 'UPCOMING',
-        'image' => 'https://source.unsplash.com/800x600/?dota2,esports',
-        'link'  => '#'
-      ],
-      [
-        'title' => 'Campus MLBB League',
-        'game' => 'MLBB',
-        'date' => 'Selesai • 31 Agu 2025',
-        'prize' => 'Rp 10.000.000',
-        'slots' => '64/64',
-        'status' => 'FINISHED',
-        'image' => 'https://source.unsplash.com/800x600/?gaming,arena',
-        'link'  => '#'
-      ],
-      [
-        'title' => 'VCT Community Series',
-        'game' => 'VALO',
-        'date' => '15–17 Sep 2025',
-        'prize' => 'Rp 20.000.000',
-        'slots' => '8/16',
-        'status' => 'UPCOMING',
-        'image' => 'https://source.unsplash.com/800x600/?fps,esports',
-        'link'  => '#'
-      ],
-      [
-        'title' => 'DOTA2 City Clash',
-        'game' => 'DOTA2',
-        'date' => 'Selesai • 28 Jul 2025',
-        'prize' => 'Rp 12.000.000',
-        'slots' => '32/32',
-        'status' => 'FINISHED',
-        'image' => 'https://source.unsplash.com/800x600/?dota,tournament',
-        'link'  => '#'
-      ],
-    ];
-  @endphp
-
   <div id="tnmGrid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-    @foreach($tournaments as $t)
-      <article
-        class="tnm-card group rounded-2xl overflow-hidden bg-white/5 ring-1 ring-white/10 shadow-lg"
-        data-game="{{ $t['game'] }}">
-        <a href="{{ $t['link'] }}" class="block overflow-hidden">
-          <img src="{{ $t['image'] }}" alt="{{ $t['title'] }}"
-               class="h-40 w-full object-cover transition-transform duration-500 group-hover:scale-105">
-        </a>
 
-        <div class="p-4">
-          <div class="flex items-center justify-between mb-2">
-            <span class="px-2 py-0.5 rounded-full bg-[#ab0506d8]/20 text-[11px] text-[#ab0506d8]">
-              {{ $t['game'] }}
-            </span>
-            <span class="text-[10px] px-2 py-0.5 rounded-full text-white {{ $statusColor[$t['status']] ?? 'bg-gray-600' }}">
-              {{ $t['status'] }}
-            </span>
-          </div>
-
-          <h3 class="text-base font-semibold text-gray-100 group-hover:text-white line-clamp-2">
-            <a href="{{ $t['link'] }}">{{ $t['title'] }}</a>
-          </h3>
-
-          <div class="mt-3 space-y-1 text-sm text-gray-300">
-            <div class="flex items-center gap-2">
-              <i class="fa fa-calendar text-xs opacity-70"></i>
-              <span>{{ $t['date'] }}</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <i class="fa fa-trophy text-xs opacity-70"></i>
-              <span>Prize Pool: {{ $t['prize'] }}</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <i class="fa fa-users text-xs opacity-70"></i>
-              <span>Slots: {{ $t['slots'] }}</span>
-            </div>
-          </div>
-
-          <div class="mt-4 flex items-center gap-2">
-            <a href="{{ $t['link'] }}"
-               class="inline-flex items-center gap-2 text-sm font-semibold text-white bg-[#ab0506d8] hover:bg-red-700 px-3 py-2 rounded-lg">
-              Lihat Detail
-              <i class="fa fa-arrow-right text-xs"></i>
-            </a>
-
-            @if($t['status'] === 'UPCOMING')
-              <button
-                class="ml-auto inline-flex items-center gap-2 text-sm font-semibold text-gray-900 bg-white hover:bg-gray-100 px-3 py-2 rounded-lg">
-                Daftar
-                <i class="fa fa-edit text-xs"></i>
-              </button>
-            @endif
-          </div>
+    <!-- Turnamen 1 -->
+    <article class="tnm-card group rounded-2xl overflow-hidden bg-white/5 ring-1 ring-white/10 shadow-lg" data-game="MLBB">
+      <a href="#" class="block overflow-hidden">
+        <img src="images/mlbb1.jpg" alt="MPL Community Cup" class="h-40 w-full object-cover transition-transform duration-500 group-hover:scale-105">
+      </a>
+      <div class="p-4">
+        <div class="flex items-center justify-between mb-2">
+          <span class="px-2 py-0.5 rounded-full bg-[#FF9800]/20 text-[11px] text-[#FF9800]">MLBB</span>
+          <span class="text-[10px] px-2 py-0.5 rounded-full text-white bg-yellow-500/80">UPCOMING</span>
         </div>
-      </article>
-    @endforeach
+        <h3 class="text-base font-semibold text-gray-100 group-hover:text-white line-clamp-2">
+          <a href="#">MPL Community Cup</a>
+        </h3>
+        <div class="mt-3 space-y-1 text-sm text-gray-300">
+          <div class="flex items-center gap-2"><i class="fa fa-calendar text-xs opacity-70"></i> <span>10–12 Okt 2025</span></div>
+          <div class="flex items-center gap-2"><i class="fa fa-trophy text-xs opacity-70"></i> <span>Prize Pool: Rp 25.000.000</span></div>
+          <div class="flex items-center gap-2"><i class="fa fa-users text-xs opacity-70"></i> <span>Slots: 64/64 (Full)</span></div>
+        </div>
+        <div class="mt-4 flex items-center gap-2">
+          <a href="#" class="inline-flex items-center gap-2 text-sm font-semibold text-white bg-[#FF9800] hover:bg-orange-600 px-3 py-2 rounded-lg">
+            Lihat Detail <i class="fa fa-arrow-right text-xs"></i>
+          </a>
+          <button class="ml-auto inline-flex items-center gap-2 text-sm font-semibold text-gray-900 bg-white hover:bg-gray-100 px-3 py-2 rounded-lg">
+            Daftar <i class="fa fa-edit text-xs"></i>
+          </button>
+        </div>
+      </div>
+    </article>
+
+    <!-- Turnamen 2 -->
+    <article class="tnm-card group rounded-2xl overflow-hidden bg-white/5 ring-1 ring-white/10 shadow-lg" data-game="VALO">
+      <a href="#" class="block overflow-hidden">
+        <img src="images/valo1.jpg" alt="SEA Valorant Open" class="h-40 w-full object-cover transition-transform duration-500 group-hover:scale-105">
+      </a>
+      <div class="p-4">
+        <div class="flex items-center justify-between mb-2">
+          <span class="px-2 py-0.5 rounded-full bg-[#FF9800]/20 text-[11px] text-[#FF9800]">VALO</span>
+          <span class="text-[10px] px-2 py-0.5 rounded-full text-white bg-red-600/90">LIVE</span>
+        </div>
+        <h3 class="text-base font-semibold text-gray-100 group-hover:text-white line-clamp-2">
+          <a href="#">SEA Valorant Open</a>
+        </h3>
+        <div class="mt-3 space-y-1 text-sm text-gray-300">
+          <div class="flex items-center gap-2"><i class="fa fa-calendar text-xs opacity-70"></i> <span>Hari ini • 19:00</span></div>
+          <div class="flex items-center gap-2"><i class="fa fa-trophy text-xs opacity-70"></i> <span>Prize Pool: Rp 15.000.000</span></div>
+          <div class="flex items-center gap-2"><i class="fa fa-users text-xs opacity-70"></i> <span>Slots: 14/16</span></div>
+        </div>
+        <div class="mt-4 flex items-center gap-2">
+          <a href="#" class="inline-flex items-center gap-2 text-sm font-semibold text-white bg-[#FF9800] hover:bg-orange-600 px-3 py-2 rounded-lg">
+            Lihat Detail <i class="fa fa-arrow-right text-xs"></i>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Turnamen 3 -->
+    <article class="tnm-card group rounded-2xl overflow-hidden bg-white/5 ring-1 ring-white/10 shadow-lg" data-game="DOTA2">
+      <a href="#" class="block overflow-hidden">
+        <img src="images/dota1.jpg" alt="DPC Qualifier" class="h-40 w-full object-cover transition-transform duration-500 group-hover:scale-105">
+      </a>
+      <div class="p-4">
+        <div class="flex items-center justify-between mb-2">
+          <span class="px-2 py-0.5 rounded-full bg-[#FF9800]/20 text-[11px] text-[#FF9800]">DOTA2</span>
+          <span class="text-[10px] px-2 py-0.5 rounded-full text-white bg-yellow-500/80">UPCOMING</span>
+        </div>
+        <h3 class="text-base font-semibold text-gray-100 group-hover:text-white line-clamp-2">
+          <a href="#">DPC Qualifier</a>
+        </h3>
+        <div class="mt-3 space-y-1 text-sm text-gray-300">
+          <div class="flex items-center gap-2"><i class="fa fa-calendar text-xs opacity-70"></i> <span>22–24 Sep 2025</span></div>
+          <div class="flex items-center gap-2"><i class="fa fa-trophy text-xs opacity-70"></i> <span>Prize Pool: Rp 40.000.000</span></div>
+          <div class="flex items-center gap-2"><i class="fa fa-users text-xs opacity-70"></i> <span>Slots: 32/64</span></div>
+        </div>
+        <div class="mt-4 flex items-center gap-2">
+          <a href="#" class="inline-flex items-center gap-2 text-sm font-semibold text-white bg-[#FF9800] hover:bg-orange-600 px-3 py-2 rounded-lg">
+            Lihat Detail <i class="fa fa-arrow-right text-xs"></i>
+          </a>
+          <button class="ml-auto inline-flex items-center gap-2 text-sm font-semibold text-gray-900 bg-white hover:bg-gray-100 px-3 py-2 rounded-lg">
+            Daftar <i class="fa fa-edit text-xs"></i>
+          </button>
+        </div>
+      </div>
+    </article>
+
   </div>
 </section>
 
@@ -275,127 +257,136 @@
     <div class="flex items-center gap-2">
       <!-- Tabs -->
       <div class="inline-flex gap-1 bg-white/5 ring-1 ring-white/10 rounded-full p-1">
-        <button class="forum-tab active px-3 py-1.5 text-xs md:text-sm rounded-full text-white bg-[#ab0506d8]" data-tab="ALL">All</button>
+        <button class="forum-tab active px-3 py-1.5 text-xs md:text-sm rounded-full text-white bg-[#FF9800]" data-tab="ALL">All</button>
         <button class="forum-tab px-3 py-1.5 text-xs md:text-sm rounded-full text-gray-200 hover:bg-white/10" data-tab="TRENDING">Trending</button>
         <button class="forum-tab px-3 py-1.5 text-xs md:text-sm rounded-full text-gray-200 hover:bg-white/10" data-tab="NEW">New</button>
       </div>
 
-      <a href="{{ route('forum.index') }}"
-         class="hidden sm:inline-flex items-center gap-2 text-sm font-semibold text-white bg-[#ab0506d8] hover:bg-red-700 px-4 py-2 rounded-lg">
+      <a href="#"
+         class="hidden sm:inline-flex items-center gap-2 text-sm font-semibold text-white bg-[#FF9800] hover:bg-orange-600 px-4 py-2 rounded-lg">
         Lihat Semua
         <i class="fa fa-arrow-right text-xs"></i>
       </a>
     </div>
   </div>
 
-  @php
-    $threads = [
-      [
-        'title' => 'Tips Draft MLBB: Counter Hero Meta Tanpa Ban',
-        'author' => 'Rian',
-        'avatar' => 'https://ui-avatars.com/api/?name=Rian&background=ab0506&color=fff',
-        'tag' => 'MLBB',
-        'replies' => 34,
-        'views' => 2_100,
-        'last' => '10 menit lalu • oleh Sasa',
-        'badge' => 'TRENDING'
-      ],
-      [
-        'title' => 'Setting Sensitivity Valorant untuk Aim Stabil',
-        'author' => 'Kevin',
-        'avatar' => 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=80&h=80&fit=crop',
-        'tag' => 'VALO',
-        'replies' => 12,
-        'views' => 880,
-        'last' => '1 jam lalu • oleh Naya',
-        'badge' => 'NEW'
-      ],
-      [
-        'title' => 'DOTA2: Kapan Harus Beli BKB? Diskusi Timing & Matchup',
-        'author' => 'Tomo',
-        'avatar' => 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=80&h=80&fit=crop',
-        'tag' => 'DOTA2',
-        'replies' => 57,
-        'views' => 4_320,
-        'last' => 'Kemarin • oleh Neo',
-        'badge' => 'TRENDING'
-      ],
-      [
-        'title' => 'Rekomendasi Headset Murah untuk Scrim Online',
-        'author' => 'Lina',
-        'avatar' => 'https://ui-avatars.com/api/?name=Lina&background=333333&color=fff',
-        'tag' => 'Gear',
-        'replies' => 8,
-        'views' => 560,
-        'last' => '2 hari lalu • oleh Lina',
-        'badge' => 'ALL'
-      ],
-      [
-        'title' => 'Sharing Bracket Community Cup Kampus',
-        'author' => 'Agus',
-        'avatar' => 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=80&h=80&fit=crop',
-        'tag' => 'MLBB',
-        'replies' => 5,
-        'views' => 300,
-        'last' => '3 hari lalu • oleh Agus',
-        'badge' => 'NEW'
-      ],
-    ];
-
-    // warna tag
-    $tagColor = [
-      'MLBB' => 'bg-rose-500/20 text-rose-300',
-      'VALO' => 'bg-indigo-500/20 text-indigo-300',
-      'DOTA2' => 'bg-emerald-500/20 text-emerald-300',
-      'Gear' => 'bg-amber-500/20 text-amber-300',
-    ];
-  @endphp
-
   <div id="forumList" class="space-y-3">
-    @foreach($threads as $t)
-      <article class="forum-item flex items-start gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 ring-1 ring-white/10 transition"
-               data-badge="{{ $t['badge'] }}">
-        <img src="{{ $t['avatar'] }}" alt="{{ $t['author'] }}" class="w-10 h-10 rounded-full object-cover">
-
-        <div class="flex-1 min-w-0">
-          <div class="flex flex-wrap items-center gap-2">
-            <a href="#" class="text-base md:text-lg font-semibold text-gray-100 hover:text-white truncate">
-              {{ $t['title'] }}
-            </a>
-            <span class="px-2 py-0.5 rounded-full text-[11px] {{ $tagColor[$t['tag']] ?? 'bg-white/10 text-gray-200' }}">
-              {{ $t['tag'] }}
-            </span>
-          </div>
-
-          <div class="mt-1 text-xs text-gray-400">
-            Dibuat oleh <span class="text-gray-300">{{ $t['author'] }}</span>
-          </div>
+    <!-- Item 1 -->
+    <article class="forum-item flex items-start gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 ring-1 ring-white/10 transition" data-badge="TRENDING">
+      <img src="https://ui-avatars.com/api/?name=Rian&background=FF9800&color=fff" alt="Rian" class="w-10 h-10 rounded-full object-cover">
+      <div class="flex-1 min-w-0">
+        <div class="flex flex-wrap items-center gap-2">
+          <a href="#" class="text-base md:text-lg font-semibold text-gray-100 hover:text-white truncate">
+            Tips Draft MLBB: Counter Hero Meta Tanpa Ban
+          </a>
+          <span class="px-2 py-0.5 rounded-full text-[11px] bg-[#FF9800]/20 text-[#FF9800]">MLBB</span>
         </div>
-
-        <div class="shrink-0 text-right">
-          <div class="flex items-center gap-3 text-gray-300">
-            <span class="inline-flex items-center gap-1 text-sm">
-              <i class="fa fa-comment-dots text-xs opacity-70"></i>{{ $t['replies'] }}
-            </span>
-            <span class="inline-flex items-center gap-1 text-sm">
-              <i class="fa fa-eye text-xs opacity-70"></i>{{ number_format($t['views']) }}
-            </span>
-          </div>
-          <div class="text-[11px] text-gray-400 mt-1">{{ $t['last'] }}</div>
+        <div class="mt-1 text-xs text-gray-400">Dibuat oleh <span class="text-gray-300">Rian</span></div>
+      </div>
+      <div class="shrink-0 text-right">
+        <div class="flex items-center gap-3 text-gray-300">
+          <span class="inline-flex items-center gap-1 text-sm"><i class="fa fa-comment-dots text-xs opacity-70"></i>34</span>
+          <span class="inline-flex items-center gap-1 text-sm"><i class="fa fa-eye text-xs opacity-70"></i>2,100</span>
         </div>
-      </article>
-    @endforeach
+        <div class="text-[11px] text-gray-400 mt-1">10 menit lalu • oleh Sasa</div>
+      </div>
+    </article>
+
+    <!-- Item 2 -->
+    <article class="forum-item flex items-start gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 ring-1 ring-white/10 transition" data-badge="NEW">
+      <img src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=80&h=80&fit=crop" alt="Kevin" class="w-10 h-10 rounded-full object-cover">
+      <div class="flex-1 min-w-0">
+        <div class="flex flex-wrap items-center gap-2">
+          <a href="#" class="text-base md:text-lg font-semibold text-gray-100 hover:text-white truncate">
+            Setting Sensitivity Valorant untuk Aim Stabil
+          </a>
+          <span class="px-2 py-0.5 rounded-full text-[11px] bg-[#FF9800]/20 text-[#FF9800]">VALO</span>
+        </div>
+        <div class="mt-1 text-xs text-gray-400">Dibuat oleh <span class="text-gray-300">Kevin</span></div>
+      </div>
+      <div class="shrink-0 text-right">
+        <div class="flex items-center gap-3 text-gray-300">
+          <span class="inline-flex items-center gap-1 text-sm"><i class="fa fa-comment-dots text-xs opacity-70"></i>12</span>
+          <span class="inline-flex items-center gap-1 text-sm"><i class="fa fa-eye text-xs opacity-70"></i>880</span>
+        </div>
+        <div class="text-[11px] text-gray-400 mt-1">1 jam lalu • oleh Naya</div>
+      </div>
+    </article>
+
+    <!-- Item 3 -->
+    <article class="forum-item flex items-start gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 ring-1 ring-white/10 transition" data-badge="TRENDING">
+      <img src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=80&h=80&fit=crop" alt="Tomo" class="w-10 h-10 rounded-full object-cover">
+      <div class="flex-1 min-w-0">
+        <div class="flex flex-wrap items-center gap-2">
+          <a href="#" class="text-base md:text-lg font-semibold text-gray-100 hover:text-white truncate">
+            DOTA2: Kapan Harus Beli BKB? Diskusi Timing & Matchup
+          </a>
+          <span class="px-2 py-0.5 rounded-full text-[11px] bg-[#FF9800]/20 text-[#FF9800]">DOTA2</span>
+        </div>
+        <div class="mt-1 text-xs text-gray-400">Dibuat oleh <span class="text-gray-300">Tomo</span></div>
+      </div>
+      <div class="shrink-0 text-right">
+        <div class="flex items-center gap-3 text-gray-300">
+          <span class="inline-flex items-center gap-1 text-sm"><i class="fa fa-comment-dots text-xs opacity-70"></i>57</span>
+          <span class="inline-flex items-center gap-1 text-sm"><i class="fa fa-eye text-xs opacity-70"></i>4,320</span>
+        </div>
+        <div class="text-[11px] text-gray-400 mt-1">Kemarin • oleh Neo</div>
+      </div>
+    </article>
+
+    <!-- Item 4 -->
+    <article class="forum-item flex items-start gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 ring-1 ring-white/10 transition" data-badge="ALL">
+      <img src="https://ui-avatars.com/api/?name=Lina&background=333333&color=fff" alt="Lina" class="w-10 h-10 rounded-full object-cover">
+      <div class="flex-1 min-w-0">
+        <div class="flex flex-wrap items-center gap-2">
+          <a href="#" class="text-base md:text-lg font-semibold text-gray-100 hover:text-white truncate">
+            Rekomendasi Headset Murah untuk Scrim Online
+          </a>
+          <span class="px-2 py-0.5 rounded-full text-[11px] bg-[#FF9800]/20 text-[#FF9800]">Gear</span>
+        </div>
+        <div class="mt-1 text-xs text-gray-400">Dibuat oleh <span class="text-gray-300">Lina</span></div>
+      </div>
+      <div class="shrink-0 text-right">
+        <div class="flex items-center gap-3 text-gray-300">
+          <span class="inline-flex items-center gap-1 text-sm"><i class="fa fa-comment-dots text-xs opacity-70"></i>8</span>
+          <span class="inline-flex items-center gap-1 text-sm"><i class="fa fa-eye text-xs opacity-70"></i>560</span>
+        </div>
+        <div class="text-[11px] text-gray-400 mt-1">2 hari lalu • oleh Lina</div>
+      </div>
+    </article>
+
+    <!-- Item 5 -->
+    <article class="forum-item flex items-start gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 ring-1 ring-white/10 transition" data-badge="NEW">
+      <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=80&h=80&fit=crop" alt="Agus" class="w-10 h-10 rounded-full object-cover">
+      <div class="flex-1 min-w-0">
+        <div class="flex flex-wrap items-center gap-2">
+          <a href="#" class="text-base md:text-lg font-semibold text-gray-100 hover:text-white truncate">
+            Sharing Bracket Community Cup Kampus
+          </a>
+          <span class="px-2 py-0.5 rounded-full text-[11px] bg-[#FF9800]/20 text-[#FF9800]">MLBB</span>
+        </div>
+        <div class="mt-1 text-xs text-gray-400">Dibuat oleh <span class="text-gray-300">Agus</span></div>
+      </div>
+      <div class="shrink-0 text-right">
+        <div class="flex items-center gap-3 text-gray-300">
+          <span class="inline-flex items-center gap-1 text-sm"><i class="fa fa-comment-dots text-xs opacity-70"></i>5</span>
+          <span class="inline-flex items-center gap-1 text-sm"><i class="fa fa-eye text-xs opacity-70"></i>300</span>
+        </div>
+        <div class="text-[11px] text-gray-400 mt-1">3 hari lalu • oleh Agus</div>
+      </div>
+    </article>
   </div>
 
   <!-- CTA bawah (mobile visible) -->
   <div class="mt-6 flex justify-center sm:justify-end">
-    <a href="{{ route('forum.index') }}"
-       class="inline-flex items-center gap-2 text-sm font-semibold text-white bg-[#ab0506d8] hover:bg-red-700 px-4 py-2 rounded-lg">
+    <a href="#"
+       class="inline-flex items-center gap-2 text-sm font-semibold text-white bg-[#FF9800] hover:bg-orange-600 px-4 py-2 rounded-lg">
       Masuk Forum
       <i class="fa fa-arrow-right text-xs"></i>
     </a>
   </div>
 </section>
+
 
 @endsection
 

@@ -79,10 +79,10 @@
     </style>
 </head>
 
-<body class="bg-gray-100 font-sans">
+<body class="bg-[#1e1e1e] font-sans">
     @include('components.header')
 
-    <main class="bg-gray-900">
+    <main class="bg-[#1e1e1e]">
         @yield('content')
     </main>
 
