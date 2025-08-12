@@ -28,17 +28,46 @@ class AuthService
 
     public function login(array $credentials): array
     {
-        if (!$token = Auth::attempt($credentials)) {
-            throw new \Exception('Email atau password salah.');
+        $login = $credentials['login'] ?? null;
+        $password = $credentials['password'] ?? null;
+
+        if (!$login || !$password) {
+            throw new \InvalidArgumentException('Login dan password wajib diisi.');
+        }
+
+        // Tentukan kolom yang dipakai untuk attempt: email / phone / username
+        $field = $this->resolveLoginField($login);
+
+        // Satu kali attempt dengan field yang tepat (JWT akan mengembalikan token)
+        if (!$token = Auth::attempt([$field => $login, 'password' => $password])) {
+            throw new \Exception('Email/nomor HP/username atau password salah.');
         }
 
         $user = Auth::user();
 
         if ($user->account_status !== 'verified') {
+            Auth::logout(); // kalau mau paksa logout token yang baru
             throw new \Exception('Akun belum diverifikasi.');
         }
 
         return compact('user', 'token');
+    }
+
+    private function resolveLoginField(string $login): string
+    {
+        // Cek email
+        if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
+            return 'email';
+        }
+
+        // Cek phone (sederhana): hanya digit, boleh diawali +, panjang 7–15
+        // Sesuaikan regex/normalisasi dengan format penyimpanan di DB (mis. +62 vs 08)
+        if (preg_match('/^\+?\d{7,15}$/', $login)) {
+            return 'phone';
+        }
+
+        // Sisanya dianggap username
+        return 'username';
     }
 
     public function verifyOtp(string $email, string $otpCode): void
