@@ -45,19 +45,21 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'login' => 'required|string', // bisa email/phone/username
             'password' => 'required|string',
         ]);
 
         try {
-            $data = $this->authService->login($request->only('email', 'password'));
+            $data = $this->authService->login([
+                'login' => $request->login,
+                'password' => $request->password
+            ]);
 
             return response()->json([
                 'message' => 'Login berhasil!',
                 'user' => new UserResource($data['user']),
                 'token' => $data['token'],
             ]);
-
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 401);
         }
