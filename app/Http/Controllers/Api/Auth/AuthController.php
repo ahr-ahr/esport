@@ -59,7 +59,7 @@ class AuthController extends Controller
                 'message' => 'Login berhasil!',
                 'user' => new UserResource($data['user']),
                 'token' => $data['token'],
-            ]);
+            ], 201);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 401);
         }
@@ -75,7 +75,7 @@ class AuthController extends Controller
         try {
             $this->authService->verifyOtp($request->email, $request->otp_code);
 
-            return response()->json(['message' => 'Akun berhasil diverifikasi!']);
+            return response()->json(['message' => 'Akun berhasil diverifikasi!'], 201);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
