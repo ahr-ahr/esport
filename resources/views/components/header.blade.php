@@ -23,14 +23,24 @@
         </div>
 
         <!-- User Icon -->
-        <a href="#" class="cursor-pointer">
+        <a href="#" id="userIcon" class="cursor-pointer">
             <i class="fa fa-user hover:text-[#FF9800] text-gray-300 text-2xl transition"></i>
         </a>
+
+        <!-- Modal Login (include file modal.html di sini) -->
+        @include('components.modals.login-modal')
+
+
     </div>
 </header>
 
 
 <script>
+    document.getElementById('userIcon').addEventListener('click', function (e) {
+        e.preventDefault();
+        document.getElementById('loginModal').classList.remove('hidden');
+    });
+
     document.addEventListener("DOMContentLoaded", function () {
         const toggleBtn = document.getElementById("langToggle");
         const langMenu = document.getElementById("langMenu");
