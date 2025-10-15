@@ -1,5 +1,6 @@
 <!-- Modal Register -->
-<div id="registerModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[500] flex items-center justify-center">
+<div id="registerModal"
+    class="hidden fixed inset-0 bg-black bg-opacity-50 z-[500] flex items-center justify-center">
     <div class="bg-[#1e1e1e] rounded-lg shadow-lg w-full max-w-sm p-6 relative">
         <form id="registerForm" autocomplete="off">
             <!-- Tombol Close -->
@@ -27,7 +28,7 @@
                     class="mt-6 w-full bg-[#FF9800] hover:bg-[#FB8C00] text-white font-bold py-2 px-4 rounded transition">Selanjutnya</button>
             </div>
 
-            <!-- Step 2 -->
+            <!-- Step 2 (Gabung Email, Phone, Password) -->
             <div class="register-step hidden" data-step="2">
                 <div>
                     <label class="block text-gray-300 mb-1">Email</label>
@@ -39,31 +40,21 @@
                     <input type="tel" name="phone"
                         class="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-[#FF9800]">
                 </div>
-                <div class="flex gap-2 mt-6">
-                    <button type="button" onclick="prevRegisterStep(1)"
-                        class="w-1/2 bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded transition">Kembali</button>
-                    <button type="button" onclick="nextRegisterStep(3)"
-                        class="w-1/2 bg-[#FF9800] hover:bg-[#FB8C00] text-white font-bold py-2 px-4 rounded transition">Selanjutnya</button>
-                </div>
-            </div>
-
-            <!-- Step 3 -->
-            <div class="register-step hidden" data-step="3">
-                <div>
+                <div class="mt-4">
                     <label class="block text-gray-300 mb-1">Password</label>
                     <input type="password" name="password"
                         class="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-[#FF9800]">
                 </div>
                 <div class="flex gap-2 mt-6">
-                    <button type="button" onclick="prevRegisterStep(2)"
+                    <button type="button" onclick="prevRegisterStep(1)"
                         class="w-1/2 bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded transition">Kembali</button>
                     <button type="button" id="submitRegister"
-                        class="w-1/2 bg-[#FF9800] hover:bg-[#FB8C00] text-white font-bold py-2 px-4 rounded transition">Selanjutnya</button>
+                        class="w-1/2 bg-[#FF9800] hover:bg-[#FB8C00] text-white font-bold py-2 px-4 rounded transition">Daftar</button>
                 </div>
             </div>
 
-            <!-- Step 4 (OTP) -->
-            <div class="register-step hidden" data-step="4">
+            <!-- Step 3 (OTP) -->
+            <div class="register-step hidden" data-step="3">
                 <label class="block text-gray-300 mb-3">Verifikasi OTP</label>
                 <div class="flex justify-between mb-4">
                     <input type="text" maxlength="1"
@@ -80,7 +71,7 @@
                         class="otp-input w-12 h-12 text-center bg-gray-800 text-white border border-gray-600 rounded focus:border-[#FF9800]">
                 </div>
                 <div class="flex gap-2">
-                    <button type="button" onclick="prevRegisterStep(3)"
+                    <button type="button" onclick="prevRegisterStep(2)"
                         class="w-1/2 bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded transition">Kembali</button>
                     <button type="button" id="verifyOtpBtn"
                         class="w-1/2 bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded transition">Verifikasi</button>
@@ -97,10 +88,9 @@
 </div>
 
 <script>
-const BASE_URL = "https://db0ebc92066d.ngrok-free.app/api/v1/auth";
+const BASE_URL = "/api/v1/auth";
 let currentStep = 1;
 
-// Data register
 let registerData = {
     fullname: "",
     username: "",
@@ -111,67 +101,53 @@ let registerData = {
     fcm_token: "consequatur"
 };
 
-// --- Tampilkan step ---
 function showRegisterStep(step) {
     document.querySelectorAll(".register-step").forEach(el => el.classList.add("hidden"));
     const stepEl = document.querySelector(`.register-step[data-step="${step}"]`);
-    if (stepEl) {
-        stepEl.classList.remove("hidden");
-        currentStep = step;
-    }
+    if (stepEl) stepEl.classList.remove("hidden");
+    currentStep = step;
 }
 
-// --- Lanjut step ---
 function nextRegisterStep(step) {
     if (currentStep === 1) {
-        const stepEl = document.querySelector('.register-step[data-step="1"]');
-        const fullname = stepEl.querySelector("input[name='fullname']");
-        const username = stepEl.querySelector("input[name='username']");
-        if (!fullname.value.trim() || !username.value.trim()) {
+        const form = document.getElementById("registerForm");
+        const fullname = form.querySelector("input[name='fullname']").value.trim();
+        const username = form.querySelector("input[name='username']").value.trim();
+        if (!fullname || !username) {
             Swal.fire("Perhatian", "Fullname dan Username wajib diisi!", "warning");
             return;
         }
-        registerData.fullname = fullname.value.trim();
-        registerData.username = username.value.trim();
-    } else if (currentStep === 2) {
-        const stepEl = document.querySelector('.register-step[data-step="2"]');
-        const email = stepEl.querySelector("input[name='email']");
-        const phone = stepEl.querySelector("input[name='phone']");
-        if (!email.value.trim() || !phone.value.trim()) {
-            Swal.fire("Perhatian", "Email dan Phone wajib diisi!", "warning");
-            return;
-        }
-        registerData.email = email.value.trim();
-        registerData.phone = phone.value.trim();
-    } else if (currentStep === 3) {
-        const stepEl = document.querySelector('.register-step[data-step="3"]');
-        const password = stepEl.querySelector("input[name='password']");
-        if (!password.value.trim()) {
-            Swal.fire("Perhatian", "Password wajib diisi!", "warning");
-            return;
-        }
-        registerData.password = password.value.trim();
-
-        // Kirim ke API, submitRegister akan handle step 4
-        submitRegister();
-        return; // jangan lanjutkan showRegisterStep
+        registerData.fullname = fullname;
+        registerData.username = username;
     }
-
     showRegisterStep(step);
 }
 
-// --- Kembali step ---
 function prevRegisterStep(step) {
     showRegisterStep(step);
 }
 
-// --- Submit register ke API ---
+
 async function submitRegister() {
+    const form = document.getElementById("registerForm");
+    const email = form.querySelector("input[name='email']").value.trim();
+    const phone = form.querySelector("input[name='phone']").value.trim();
+    const password = form.querySelector("input[name='password']").value.trim();
+
+    if (!email || !phone || !password) {
+        Swal.fire("Perhatian", "Email, Phone, dan Password wajib diisi!", "warning");
+        return;
+    }
+
+    registerData.email = email;
+    registerData.phone = phone;
+    registerData.password = password;
+
+    console.log("Request body:", JSON.stringify(registerData, null, 2));
+
     const btn = document.getElementById("submitRegister");
     btn.disabled = true;
     btn.textContent = "Mengirim...";
-
-    console.log("Request body JSON:", JSON.stringify(registerData));
 
     try {
         const res = await fetch(`${BASE_URL}/register`, {
@@ -187,28 +163,48 @@ async function submitRegister() {
         console.log("Response:", data);
 
         if (res.ok) {
-            showRegisterStep(4); // tampilkan step OTP
             Swal.fire("Berhasil!", "Kode OTP telah dikirim ke email kamu.", "success");
+            showRegisterStep(3);
         } else {
-            Swal.fire("Gagal!", data.message || data.error || "Terjadi kesalahan.", "error");
+            Swal.fire("Gagal!", data.message || "Terjadi kesalahan.", "error");
         }
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        console.error(error);
         Swal.fire("Error", "Tidak dapat menghubungi server.", "error");
     } finally {
         btn.disabled = false;
-        btn.textContent = "Selanjutnya";
+        btn.textContent = "Daftar";
     }
 }
 
-// --- Verifikasi OTP ---
+document.getElementById("submitRegister").addEventListener("click", submitRegister);
+document.getElementById("closeRegisterModal").addEventListener("click", () => {
+    document.getElementById("registerModal").classList.add("hidden");
+});
+
+document.querySelectorAll(".otp-input").forEach((input, idx, arr) => {
+    input.addEventListener("input", () => {
+        if (input.value.length === 1 && idx < arr.length - 1) arr[idx + 1].focus();
+    });
+});
+
+showRegisterStep(currentStep);
+
 document.getElementById("verifyOtpBtn").addEventListener("click", async () => {
-    const email = registerData.email.trim();
+    // Ambil semua input OTP
     const otpInputs = document.querySelectorAll(".otp-input");
-    const otpCode = Array.from(otpInputs).map(i => i.value).join("");
+    let otpCode = "";
+    otpInputs.forEach(input => otpCode += input.value.trim());
 
     if (otpCode.length < 6) {
-        Swal.fire("Perhatian", "Masukkan semua 6 digit kode OTP.", "warning");
+        Swal.fire("Perhatian", "Masukkan semua 6 digit kode OTP!", "warning");
+        return;
+    }
+
+    // Ambil email dari data register sebelumnya
+    const email = registerData.email;
+    if (!email) {
+        Swal.fire("Error", "Email tidak ditemukan, ulangi registrasi.", "error");
         return;
     }
 
@@ -217,49 +213,40 @@ document.getElementById("verifyOtpBtn").addEventListener("click", async () => {
     btn.textContent = "Memverifikasi...";
 
     try {
-        const res = await fetch(`${BASE_URL}/verify`, {
+        const response = await fetch(`${BASE_URL}/verify`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
-            body: JSON.stringify({ email, otp: otpCode })
+            body: JSON.stringify({
+                email: email,
+                otp_code: otpCode
+            })
         });
 
-        const data = await res.json();
-        console.log("Response verifikasi:", data);
+        const data = await response.json();
+        console.log("OTP Verification Response:", data);
 
-        if (res.ok) {
-            if (data.token) localStorage.setItem("token", data.token);
+        if (response.ok) {
+            Swal.fire("Berhasil!", "Akun kamu berhasil diverifikasi.", "success");
+            
+            // Tutup modal register
+            document.getElementById("registerModal").classList.add("hidden");
 
-            Swal.fire("Verifikasi Berhasil", "Akun kamu telah aktif!", "success").then(() => {
-                document.getElementById("registerModal").classList.add("hidden");
-                location.reload();
-            });
+            // (Opsional) Tampilkan modal login otomatis
+            setTimeout(() => {
+                document.getElementById("loginModal").classList.remove("hidden");
+            }, 800);
         } else {
-            Swal.fire("Gagal!", data.message || "Kode OTP salah.", "error");
+            Swal.fire("Gagal!", data.message || "Kode OTP salah atau sudah kadaluarsa.", "error");
         }
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        console.error(error);
         Swal.fire("Error", "Tidak dapat menghubungi server.", "error");
     } finally {
         btn.disabled = false;
         btn.textContent = "Verifikasi";
     }
 });
-
-// --- Auto fokus OTP ---
-document.querySelectorAll(".otp-input").forEach((input, idx, arr) => {
-    input.addEventListener("input", () => {
-        if (input.value.length === 1 && idx < arr.length - 1) arr[idx + 1].focus();
-    });
-});
-
-// --- Tutup modal ---
-document.getElementById("closeRegisterModal").addEventListener("click", () => {
-    document.getElementById("registerModal").classList.add("hidden");
-});
-
-// --- Tampilkan step awal ---
-showRegisterStep(currentStep);
 </script>
