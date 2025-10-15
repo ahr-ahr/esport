@@ -97,134 +97,169 @@
 </div>
 
 <script>
-    const BASE_URL = "http://127.0.0.1:8000/api/v1/auth";
-    let currentStep = 1;
+const BASE_URL = "https://db0ebc92066d.ngrok-free.app/api/v1/auth";
+let currentStep = 1;
 
-    // --- Fungsi navigasi antar step ---
-    function showRegisterStep(step) {
-        document.querySelectorAll(".register-step").forEach((el, index) => {
-            el.classList.toggle("hidden", index + 1 !== step);
-        });
+// Data register
+let registerData = {
+    fullname: "",
+    username: "",
+    email: "",
+    phone: "",
+    password: "",
+    role: "owner",
+    fcm_token: "consequatur"
+};
+
+// --- Tampilkan step ---
+function showRegisterStep(step) {
+    document.querySelectorAll(".register-step").forEach(el => el.classList.add("hidden"));
+    const stepEl = document.querySelector(`.register-step[data-step="${step}"]`);
+    if (stepEl) {
+        stepEl.classList.remove("hidden");
         currentStep = step;
     }
-
-    function nextRegisterStep(step) {
-        showRegisterStep(step);
-    }
-
-    function prevRegisterStep(step) {
-        showRegisterStep(step);
-    }
-
-    showRegisterStep(currentStep);
-
-    // --- Handle tombol submit register ---
-    document.getElementById("submitRegister").addEventListener("click", async () => {
-    const fullname = document.querySelector("input[name='fullname']").value.trim();
-    const username = document.querySelector("input[name='username']").value.trim();
-    const email = document.querySelector("input[name='email']").value.trim();
-    const phone = document.querySelector("input[name='phone']").value.trim();
-    const password = document.querySelector("input[name='password']").value.trim();
-
-    if (!fullname || !username || !email || !phone || !password) {
-    Swal.fire("Perhatian", "Semua kolom wajib diisi!", "warning");
-    return;
 }
 
+// --- Lanjut step ---
+function nextRegisterStep(step) {
+    if (currentStep === 1) {
+        const stepEl = document.querySelector('.register-step[data-step="1"]');
+        const fullname = stepEl.querySelector("input[name='fullname']");
+        const username = stepEl.querySelector("input[name='username']");
+        if (!fullname.value.trim() || !username.value.trim()) {
+            Swal.fire("Perhatian", "Fullname dan Username wajib diisi!", "warning");
+            return;
+        }
+        registerData.fullname = fullname.value.trim();
+        registerData.username = username.value.trim();
+    } else if (currentStep === 2) {
+        const stepEl = document.querySelector('.register-step[data-step="2"]');
+        const email = stepEl.querySelector("input[name='email']");
+        const phone = stepEl.querySelector("input[name='phone']");
+        if (!email.value.trim() || !phone.value.trim()) {
+            Swal.fire("Perhatian", "Email dan Phone wajib diisi!", "warning");
+            return;
+        }
+        registerData.email = email.value.trim();
+        registerData.phone = phone.value.trim();
+    } else if (currentStep === 3) {
+        const stepEl = document.querySelector('.register-step[data-step="3"]');
+        const password = stepEl.querySelector("input[name='password']");
+        if (!password.value.trim()) {
+            Swal.fire("Perhatian", "Password wajib diisi!", "warning");
+            return;
+        }
+        registerData.password = password.value.trim();
+
+        // Kirim ke API, submitRegister akan handle step 4
+        submitRegister();
+        return; // jangan lanjutkan showRegisterStep
+    }
+
+    showRegisterStep(step);
+}
+
+// --- Kembali step ---
+function prevRegisterStep(step) {
+    showRegisterStep(step);
+}
+
+// --- Submit register ke API ---
+async function submitRegister() {
     const btn = document.getElementById("submitRegister");
     btn.disabled = true;
     btn.textContent = "Mengirim...";
 
-    // ✅ Tambahkan ini — bikin object data yang dikirim ke API
-    const formData = {
-        fullname,
-        username,
-        email,
-        phone,
-        password
-    };
+    console.log("Request body JSON:", JSON.stringify(registerData));
 
     try {
-        console.log("Data dikirim ke API:", formData);
         const res = await fetch(`${BASE_URL}/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json",
+                "Accept": "application/json"
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify(registerData)
         });
 
         const data = await res.json();
+        console.log("Response:", data);
 
-        if (res.status === 401 && data.error === "Akun belum diverifikasi.") {
-            nextRegisterStep(4);
-            Swal.fire("Verifikasi Diperlukan", "Masukkan kode OTP yang dikirim ke email kamu.", "info");
-        } else if (res.ok) {
-            nextRegisterStep(4);
+        if (res.ok) {
+            showRegisterStep(4); // tampilkan step OTP
             Swal.fire("Berhasil!", "Kode OTP telah dikirim ke email kamu.", "success");
         } else {
-            Swal.fire("Gagal!", data.error || "Terjadi kesalahan.", "error");
+            Swal.fire("Gagal!", data.message || data.error || "Terjadi kesalahan.", "error");
         }
     } catch (err) {
-        Swal.fire("Error", "Tidak dapat terhubung ke server.", "error");
+        console.error(err);
+        Swal.fire("Error", "Tidak dapat menghubungi server.", "error");
     } finally {
         btn.disabled = false;
         btn.textContent = "Selanjutnya";
     }
+}
+
+// --- Verifikasi OTP ---
+document.getElementById("verifyOtpBtn").addEventListener("click", async () => {
+    const email = registerData.email.trim();
+    const otpInputs = document.querySelectorAll(".otp-input");
+    const otpCode = Array.from(otpInputs).map(i => i.value).join("");
+
+    if (otpCode.length < 6) {
+        Swal.fire("Perhatian", "Masukkan semua 6 digit kode OTP.", "warning");
+        return;
+    }
+
+    const btn = document.getElementById("verifyOtpBtn");
+    btn.disabled = true;
+    btn.textContent = "Memverifikasi...";
+
+    try {
+        const res = await fetch(`${BASE_URL}/verify`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({ email, otp: otpCode })
+        });
+
+        const data = await res.json();
+        console.log("Response verifikasi:", data);
+
+        if (res.ok) {
+            if (data.token) localStorage.setItem("token", data.token);
+
+            Swal.fire("Verifikasi Berhasil", "Akun kamu telah aktif!", "success").then(() => {
+                document.getElementById("registerModal").classList.add("hidden");
+                location.reload();
+            });
+        } else {
+            Swal.fire("Gagal!", data.message || "Kode OTP salah.", "error");
+        }
+    } catch (err) {
+        console.error(err);
+        Swal.fire("Error", "Tidak dapat menghubungi server.", "error");
+    } finally {
+        btn.disabled = false;
+        btn.textContent = "Verifikasi";
+    }
 });
 
-
-    // --- Handle tombol verifikasi OTP ---
-    document.getElementById("verifyOtpBtn").addEventListener("click", async () => {
-        const email = document.querySelector("input[name='email']").value.trim();
-        const otpInputs = document.querySelectorAll(".otp-input");
-        const otpCode = Array.from(otpInputs).map(i => i.value).join("");
-
-        if (otpCode.length < 6) {
-            Swal.fire("Perhatian", "Masukkan semua 6 digit kode OTP.", "warning");
-            return;
-        }
-
-        const btn = document.getElementById("verifyOtpBtn");
-        btn.disabled = true;
-        btn.textContent = "Memverifikasi...";
-
-        try {
-            console.log("Data dikirim ke API:", formData);
-            const res = await fetch(`${BASE_URL}/verify`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password: otpCode }),
-            });
-
-            const data = await res.json();
-
-            if (res.ok) {
-                Swal.fire("Verifikasi Berhasil", "Akun kamu telah aktif!", "success").then(() => {
-                    document.getElementById("registerModal").classList.add("hidden");
-                    location.reload();
-                });
-            } else {
-                Swal.fire("Gagal!", data.error || "Kode OTP salah.", "error");
-            }
-        } catch (err) {
-            Swal.fire("Error", "Tidak dapat menghubungi server.", "error");
-        } finally {
-            btn.disabled = false;
-            btn.textContent = "Verifikasi";
-        }
+// --- Auto fokus OTP ---
+document.querySelectorAll(".otp-input").forEach((input, idx, arr) => {
+    input.addEventListener("input", () => {
+        if (input.value.length === 1 && idx < arr.length - 1) arr[idx + 1].focus();
     });
+});
 
-    // --- Auto fokus OTP ---
-    document.querySelectorAll(".otp-input").forEach((input, idx, arr) => {
-        input.addEventListener("input", () => {
-            if (input.value.length === 1 && idx < arr.length - 1) arr[idx + 1].focus();
-        });
-    });
+// --- Tutup modal ---
+document.getElementById("closeRegisterModal").addEventListener("click", () => {
+    document.getElementById("registerModal").classList.add("hidden");
+});
 
-    // --- Tutup modal ---
-    document.getElementById("closeRegisterModal").addEventListener("click", () => {
-        document.getElementById("registerModal").classList.add("hidden");
-    });
+// --- Tampilkan step awal ---
+showRegisterStep(currentStep);
 </script>
