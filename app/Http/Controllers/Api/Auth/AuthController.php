@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\Auth\AuthService;
 use App\Http\Resources\Auth\UserResource;
+use App\Http\Requests\Auth\RegisterUserRequest;
 
 class AuthController extends Controller
 {
@@ -16,30 +17,14 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
-    public function register(Request $request)
+    public function register(RegisterUserRequest $request)
     {
-        $request->validate([
-            'fullname' => 'required|string|max:255',
-            'username' => 'required|string|max:100|unique:users,username',
-            'email' => 'required|email|unique:users,email',
-            'phone' => 'nullable|string|max:20',
-            'password' => 'required|string|min:6',
-            'role' => 'nullable|in:player,owner,captain,coach,analyst,manager,admin,substitute,content_creator',
-            'fcm_token' => 'nullable|string',
-            'account_status' => 'pending',
-        ]);
+        $data = $this->authService->register($request->validated());
 
-        try {
-            $data = $this->authService->register($request->all());
-
-            return response()->json([
-                'message' => 'Registrasi berhasil! Silakan verifikasi OTP.',
-                'user' => new UserResource($data['user']),
-            ], 201);
-
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 422);
-        }
+        return response()->json([
+            'message' => 'Registrasi berhasil! Silakan verifikasi OTP.',
+            'user' => new UserResource($data['user']),
+        ], 201);
     }
 
     public function login(Request $request)

@@ -7,21 +7,30 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Notifications\SendOtpNotification;
+use App\Jobs\Auth\SendOtpJob;
 
 class AuthService
 {
     public function register(array $data): array
     {
-        $data['otp_code'] = random_int(100000, 999999);
-        $data['otp_expires_at'] = now()->addMinutes(10);
-        $data['account_status'] = 'pending';
-        $data['password'] = Hash::make($data['password']);
-        $data['fcm_token'] = $data['fcm_token'] ?? null;
+        $otpCode = random_int(100000, 999999);
 
-        $user = User::create($data);
+        $user = User::create([
+            'fullname' => $data['fullname'],
+            'username' => $data['username'],
+            'email' => $data['email'],
+            'phone' => $data['phone'] ?? null,
+            'role' => $data['role'] ?? 'player',
+            'fcm_token' => $data['fcm_token'] ?? null,
+            'account_status' => 'pending',
+            'otp_code' => $otpCode,
+            'otp_expires_at' => now()->addMinutes(10),
+            'password' => Hash::make($data['password']),
+        ]);
+
         $token = JWTAuth::fromUser($user);
 
-        $user->notify(new SendOtpNotification($data['otp_code']));
+        SendOtpJob::dispatch($user, $otpCode);
 
         return compact('user', 'token');
     }
